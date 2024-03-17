@@ -5,6 +5,7 @@ CYAN  := \033[1;36m
 CHECK := \342\234\224
 LOG   := printf "[$(CYAN)$(CHECK)$(RESET)] %s\n"
 
+CXX      := c++
 OBJ_DIR  := obj
 DIRS     := http http/parser events config handlers helpers logger
 SRC_DIRS := $(addprefix src/, $(DIRS))
@@ -28,7 +29,19 @@ SOURCES := main.cpp $(HEADERS:.hpp=.cpp)
 OBJS     := $(addprefix $(OBJ_DIR)/, $(SOURCES:.cpp=.o))
 CXXFLAGS := -Wall -Werror -Wextra -std=c++98 -O2 $(addprefix -I ,$(INC_DIRS))
 
-run: $(NAME)
+check_dependencies:
+	@if ! which python3 >/dev/null 2>&1; then \
+			echo "Python 3 is not installed. Please install Python 3.";\
+			exit 1;\
+	fi
+	@if ! which ruby >/dev/null 2>&1; then \
+			echo "Ruby is not installed. Please install Ruby.";\
+			exit 1;\
+	fi
+
+all: check_dependencies $(NAME)
+
+run: all
 	@ echo "==> Running $(NAME)"
 	@ ./$(NAME) server.conf
 
@@ -60,4 +73,4 @@ fclean: clean
 
 re: clean all
 
-.PHONY: all clean fclean re run
+.PHONY: all clean fclean re run check_dependencies
