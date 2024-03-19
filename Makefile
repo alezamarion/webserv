@@ -29,6 +29,9 @@ SOURCES := main.cpp $(HEADERS:.hpp=.cpp)
 OBJS     := $(addprefix $(OBJ_DIR)/, $(SOURCES:.cpp=.o))
 CXXFLAGS := -Wall -Werror -Wextra -std=c++98 -O2 $(addprefix -I ,$(INC_DIRS))
 
+
+all: check_dependencies $(NAME)
+
 check_dependencies:
 	@if ! which python3 >/dev/null 2>&1; then \
 			echo "Python 3 is not installed. Please install Python 3.";\
@@ -38,8 +41,6 @@ check_dependencies:
 			echo "Ruby is not installed. Please install Ruby.";\
 			exit 1;\
 	fi
-
-all: check_dependencies $(NAME)
 
 run: all
 	@ echo "==> Running $(NAME)"
